@@ -9,7 +9,8 @@ import javax.swing.*;
 		public enum Direction 
 		{
 			RIGHT_UP,RIGHT_DOWN,LEFT_UP,LEFT_DOWN,NONE
-		}	
+		}
+		
         private JFrame frame = new JFrame();
         private JPanel backBoard = new JPanel();
         private BoardSquare board[][];
@@ -32,8 +33,7 @@ import javax.swing.*;
 	        frame.setTitle("Checkers");
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        frame.setVisible(true);
-	        backBoard.setVisible(true);
-	        backBoard.addMouseListener(this);
+	        backBoard.setVisible(true);	       
 	        
 	        Type type;
 	    	for (int r = 0; r< 8 ; r++)
@@ -47,14 +47,14 @@ import javax.swing.*;
 	    			else
 	    				type=Type.BLANK;
 
-	                BoardSquare box = new BoardSquare(r,c,type);
-	                box.addMouseListener(this);
-	                board[r][c]= box;
-	                backBoard.add(box);
+	                board[r][c] = new BoardSquare(r,c,type);
+	                board[r][c].addMouseListener(this);
+	                backBoard.add(board[r][c]);
 	            }           
 	        }
 
 	        frame.add(backBoard);
+
 	    }
         
         
@@ -491,12 +491,12 @@ import javax.swing.*;
 			lastTile = tile;
 
 	    }
-	    
-	    public void checkForAnotherTurn(BoardSquare tile)
+	    //when finish "eating", give the player a chance to make another turn 
+	    public void chanceForAnotherTurn(BoardSquare tile)
 	    {
 	    	makeJump();
 	    	makeMove(tile);
-	    	//turnOffLegalMoves();
+	    	turnOffLegalMoves();
 	    	lastTile.setType(Type.BLANK);
 	    	direction = Direction.NONE;
 	    	jump=0;
@@ -504,7 +504,8 @@ import javax.swing.*;
 	    	blinkingOn(tile);
 	    	//isKill = false;
 	    	isFirst = !isFirst;
-	    	changeTurn();
+	    	//its still player one turn
+	    	isPlayerOneTurn = !isPlayerOneTurn;
 	    }
 	    
 	    public void Victory()
@@ -565,8 +566,7 @@ import javax.swing.*;
 	    		}
 	    	}
 	    	isCheck = false;
-	    	isFirst = !isFirst;
-	    	
+	    	isFirst = !isFirst; 	
 	    }
 		public void mouseClicked(MouseEvent arg0) 
 		{
@@ -584,7 +584,7 @@ import javax.swing.*;
 							turnOnLegalMoves();
 							lastTile = tile;
 						}
-						//not first click
+						//not first click 
 						else
 						{
 							frame.repaint();
@@ -630,7 +630,7 @@ import javax.swing.*;
 									isKill = false;
 									isNumberOfStepsCorrectForQueen(tile);
 									if (isKill == true)
-										checkForAnotherTurn(tile);
+										chanceForAnotherTurn(tile);
 									else
 									{
 										isFirst = !isFirst;
@@ -640,7 +640,7 @@ import javax.swing.*;
 								}
 								else
 								{
-									checkForAnotherTurn(tile);
+									chanceForAnotherTurn(tile);
 								}
 								jump=0;
 							}
