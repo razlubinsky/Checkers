@@ -10,8 +10,8 @@ public class BoardSquare extends JComponent
 {
 
 	private static final long serialVersionUID = 1L;
-	public static int width = 100;
-    public static int height = 100;
+	private static int width = 100;
+    private static int height = 100;
 	
     private int x; //x position of the rectangle measured from top left corner
     private int y; //y position of the rectangle measured from top left corner
